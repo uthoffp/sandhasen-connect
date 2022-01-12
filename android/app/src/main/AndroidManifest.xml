@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.uthoff.sandhasen_connect">
    <application
-        android:label="sandhasen_connect"
+        android:label="Sandhasen-Connect"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

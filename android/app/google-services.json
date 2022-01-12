@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "128947226273",
+    "project_id": "sandhasen-connect",
+    "storage_bucket": "sandhasen-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128947226273:android:51f7f6b71f599f52de92e0",
+        "android_client_info": {
+          "package_name": "com.uthoff.sandhasen_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128947226273-p06r9qjnbuq6pvbitdati9egbrlrud50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEnX2PVR9dGd9JQyac6b-YOm7BW7rKkyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128947226273-p06r9qjnbuq6pvbitdati9egbrlrud50.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
