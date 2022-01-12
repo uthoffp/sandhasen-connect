@@ -8,7 +8,7 @@ Mobile iOS and Android App for the German carnival club KG Bärmer Sandhase 1991
 Download or clone this repo by using the link below:
 
 ```
-https://github.com/uthoffp/DCM-Schichtplan-Flutter.git
+https://github.com/uthoffp/sandhasen-connect.git
 ```
 
 **Step 2:**
