@@ -90,7 +90,7 @@ class _MainPageState extends State<MainPage> {
             navDrawerItem(context, Icons.calendar_today, Strings.menuEvents),
             navDrawerItem(context, Icons.vpn_key, Strings.menuAdmin),
             const Divider(height: 1, thickness: 1),
-            navDrawerItem(context, Icons.info, Strings.menuHelp),
+            navDrawerItem(context, Icons.help, Strings.menuHelp),
             navDrawerItem(context, Icons.info, Strings.menuImpressum),
           ],
         ),
