@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
+import 'package:sandhasen_connect/viewmodel/info_viewmodel.dart';
 
 class ImpressumFragment extends StatefulWidget {
   const ImpressumFragment({Key? key}) : super(key: key);
@@ -18,30 +19,7 @@ class _ImpressumFragmentState extends State<ImpressumFragment> {
   @override
   void initState() {
     super.initState();
-    _content = readImpressumData();
-  }
-
-  FutureBuilder<DocumentSnapshot> readImpressumData() {
-    CollectionReference info = FirebaseFirestore.instance.collection('info');
-    return FutureBuilder<DocumentSnapshot>(
-      future: info.doc('kOGUzGOw3RuRu9MqXgHq').get(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError || (snapshot.hasData && !snapshot.data!.exists)) {
-          Message.show(context, Strings.errorRequest);
-          return _content;
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          return SingleChildScrollView(
-            child: Padding(
-              child: Html(data: data['impressum']),
-              padding: const EdgeInsets.all(8),
-            ),
-          );
-        }
-        return const LinearProgressIndicator();
-      },
-    );
+    _content = InfoViewModel.getImpressum(_content);
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
+import 'package:sandhasen_connect/viewmodel/info_viewmodel.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -9,6 +10,23 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  bool _sendNewsNotification = false;
+  TextEditingController newsController = TextEditingController();
+  TextEditingController helpController = TextEditingController();
+  TextEditingController impressumController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      InfoViewModel.getInfoString().then((value) => {
+            newsController.text = value!["news"],
+            helpController.text = value["help"],
+            impressumController.text = value["impressum"],
+          });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -59,7 +77,7 @@ class _AdminPageState extends State<AdminPage> {
                     keyboardType: TextInputType.text,
                     maxLines: 8,
                     minLines: 8,
-                    controller: null,
+                    controller: newsController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -67,10 +85,25 @@ class _AdminPageState extends State<AdminPage> {
                       labelText: Strings.menuNews,
                     ),
                   ),
+                  Row(
+                    children: [
+                      const Text("Änderungsbenachrichtigung senden"),
+                      Switch(
+                          value: _sendNewsNotification,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _sendNewsNotification = value;
+                            });
+                          }),
+                    ],
+                  ),
                   Align(
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          InfoViewModel.saveNews(
+                              newsController.text, _sendNewsNotification);
+                        },
                         icon: const Icon(Icons.save, size: 18),
                         label: const Text("Speichern"),
                       ))
@@ -87,7 +120,7 @@ class _AdminPageState extends State<AdminPage> {
                     keyboardType: TextInputType.text,
                     maxLines: 8,
                     minLines: 8,
-                    controller: null,
+                    controller: helpController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -98,7 +131,9 @@ class _AdminPageState extends State<AdminPage> {
                   Align(
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          InfoViewModel.saveHelp(helpController.text);
+                        },
                         icon: const Icon(Icons.save, size: 18),
                         label: const Text("Speichern"),
                       ))
@@ -115,7 +150,7 @@ class _AdminPageState extends State<AdminPage> {
                     keyboardType: TextInputType.text,
                     maxLines: 8,
                     minLines: 8,
-                    controller: null,
+                    controller: impressumController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -126,7 +161,9 @@ class _AdminPageState extends State<AdminPage> {
                   Align(
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          InfoViewModel.saveImpressum(impressumController.text);
+                        },
                         icon: const Icon(Icons.save, size: 18),
                         label: const Text("Speichern"),
                       ))
