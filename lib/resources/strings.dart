@@ -8,5 +8,6 @@ class Strings {
   static const String menuImpressum = "Impressum";
   static const String menuAbout = "Über";
 
-  static const String errorRequest = "Bei der Informationsabfrage ist ein Fehler aufgetreten.";
+  static const String errorRequest =
+      "Bei der Informationsabfrage ist ein Fehler aufgetreten.";
 }

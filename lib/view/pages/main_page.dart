@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
+import 'package:sandhasen_connect/view/fragments/admin_fragment.dart';
 import 'package:sandhasen_connect/view/fragments/events_fragment.dart';
 import 'package:sandhasen_connect/view/fragments/help_fragment.dart';
 import 'package:sandhasen_connect/view/fragments/impressum_fragment.dart';
@@ -15,38 +16,33 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  String _selectedFragment = Strings.menuNews;
-  Widget _contentWidget = Container();
+  Widget _contentWidget = const NewsFragment();
+  String _title = Strings.menuNews;
+  int _selectedFragmentIndex = 0;
 
   _MainPageState();
 
   // select fragment based on selectedFragment parameter. This gets called when one menue element gets clicked
-  void selectDestination(String selectedFragment) {
+  void selectDestination(int selectedFragment) {
+    _selectedFragmentIndex = selectedFragment;
     setState(() {
-      _selectedFragment = selectedFragment;
       switch (selectedFragment) {
-        case Strings.menuNews:
+        case 0:
+          _title = Strings.menuNews;
           _contentWidget = NewsFragment();
           break;
-        case Strings.menuEvents:
+        case 1:
+          _title = Strings.menuEvents;
           _contentWidget = EventsFragment();
           break;
-        case Strings.menuAdmin:
-          //_contentWidget = AbRequestFragment();
-          break;
-        case Strings.menuHelp:
-          _contentWidget = HelpFragment();
-          break;
-        case Strings.menuImpressum:
-          _contentWidget = ImpressumFragment();
-          break;
-        case Strings.menuAbout:
-          //_contentWidget = PwChangeFragment();
+        case 2:
+          _title = Strings.menuAdmin;
+          _contentWidget = AdminFragment();
           break;
       }
-      Navigator.of(context).pop();
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +51,6 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  //Main Page containing app bar, content and menu drawer to select main content fragments
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -63,54 +58,61 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_selectedFragment),
-      ),
-      drawer: Drawer(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 50, 16, 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    Strings.appName,
-                    style: textTheme.headline5,
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Align(alignment: Alignment.centerLeft, child: Text(Strings.appName, style: textTheme.headline6)),
-            ),
-            const Divider(
-              height: 1,
-              thickness: 1,
-            ),
-            navDrawerItem(context, Icons.message, Strings.menuNews),
-            navDrawerItem(context, Icons.calendar_today, Strings.menuEvents),
-            navDrawerItem(context, Icons.vpn_key, Strings.menuAdmin),
-            const Divider(height: 1, thickness: 1),
-            navDrawerItem(context, Icons.help, Strings.menuHelp),
-            navDrawerItem(context, Icons.info, Strings.menuImpressum),
-          ],
-        ),
+        title: Text(_title),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) => {
+              if (value == 0)
+                {
+                  showAboutDialog(
+                      context: context, children: [ImpressumFragment()])
+                }
+              else
+                {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text(Strings.menuHelp),
+                          content: const HelpFragment(),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("Abbrechen"))
+                          ],
+                        );
+                      })
+                }
+            },
+            icon: const Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(child: const Text(Strings.menuImpressum), value: 0),
+              PopupMenuItem(child: const Text(Strings.menuHelp), value: 1)
+            ],
+          )
+        ],
       ),
       body: _contentWidget,
-    );
-  }
-
-  // return menu drawer element
-  Widget navDrawerItem(BuildContext context, IconData icon, String text) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        leading: Icon(icon),
-        dense: true,
-        title: Text(text),
-        selected: _selectedFragment == text,
-        selectedTileColor: Theme.of(context).colorScheme.onPrimary,
-        onTap: () => selectDestination(text),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedFragmentIndex,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
+        onTap: (value) => selectDestination(value),
+        items: const [
+          BottomNavigationBarItem(
+            label: Strings.menuNews,
+            icon: Icon(Icons.message_rounded),
+          ),
+          BottomNavigationBarItem(
+            label: Strings.menuEvents,
+            icon: Icon(Icons.calendar_today_rounded),
+          ),
+          BottomNavigationBarItem(
+            label: Strings.menuAdmin,
+            icon: Icon(Icons.lock),
+          ),
+        ],
       ),
     );
   }
