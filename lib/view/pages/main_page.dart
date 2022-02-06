@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
       switch (selectedFragment) {
         case 0:
           _title = Strings.menuNews;
-          _contentWidget = NewsFragment();
+          _contentWidget = const NewsFragment();
           break;
         case 1:
           _title = Strings.menuEvents;
@@ -86,8 +86,8 @@ class _MainPageState extends State<MainPage> {
             },
             icon: const Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              PopupMenuItem(child: const Text(Strings.menuImpressum), value: 0),
-              PopupMenuItem(child: const Text(Strings.menuHelp), value: 1)
+              const PopupMenuItem(child: Text(Strings.menuImpressum), value: 0),
+              const PopupMenuItem(child: Text(Strings.menuHelp), value: 1)
             ],
           )
         ],
