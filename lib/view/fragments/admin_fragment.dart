@@ -60,7 +60,7 @@ class _AdminFragmentState extends State<AdminFragment> {
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
                 onPressed: () => login(),
-                child: Text('Anmelden'),
+                child: const Text('Anmelden'),
               ),
             )
           ],
