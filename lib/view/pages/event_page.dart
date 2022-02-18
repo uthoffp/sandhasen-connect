@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sandhasen_connect/data/firebase/event_requests.dart';
+import 'package:sandhasen_connect/data/model/event.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key, required this.event}) : super(key: key);
@@ -10,7 +10,6 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-
   @override
   void initState() {
     super.initState();
@@ -18,15 +17,12 @@ class _EventPageState extends State<EventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Card(
-            child: Padding(
-              padding: EdgeInsets.all(8),
-            ),
-          )
-        ],
+    return Scaffold(
+      appBar: AppBar(title: Text("Neuer Termin")),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [],
+        ),
       ),
     );
   }

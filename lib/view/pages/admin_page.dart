@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sandhasen_connect/data/firebase/event_requests.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
+import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
-import 'package:sandhasen_connect/view/widgets/message.dart';
+import 'package:sandhasen_connect/view/pages/newevent_page.dart';
 import 'package:sandhasen_connect/viewmodel/info_viewmodel.dart';
-
-import 'event_page.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -55,21 +53,33 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget eventsTab() {
-    Event _event = Event("Testname", "Test Org", Address("Pulheim", "50259", "Plebanusstraße 25", "Mein Eigener Platz"),
-        false, true, true, false, DateTime.now(), DateTime.now(), DateTime.now(), "Test Comment");
+    Event _event = Event(
+        "Testname",
+        "Test Org",
+        Address("Pulheim", "50259", "Plebanusstraße 25", "Mein Eigener Platz"),
+        false,
+        true,
+        true,
+        false,
+        DateTime.now(),
+        DateTime.now(),
+        "Test Comment");
 
     return Container(
       padding: const EdgeInsets.all(16),
       child: Stack(
         children: [
+          ListView(),
           Align(
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
                   onPressed: () {
-                    Message.show(context, "text");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NewEventPage()));
                   },
                   child: const Icon(Icons.add))),
-          ListView(),
         ],
       ),
     );
@@ -81,7 +91,7 @@ class _AdminPageState extends State<AdminPage> {
         children: [
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   TextFormField(
@@ -112,7 +122,8 @@ class _AdminPageState extends State<AdminPage> {
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          InfoViewModel.saveNews(newsController.text, _sendNewsNotification);
+                          InfoViewModel.saveNews(
+                              newsController.text, _sendNewsNotification);
                         },
                         icon: const Icon(Icons.save, size: 18),
                         label: const Text("Speichern"),
@@ -123,7 +134,7 @@ class _AdminPageState extends State<AdminPage> {
           ),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   TextFormField(
@@ -153,7 +164,7 @@ class _AdminPageState extends State<AdminPage> {
           ),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   TextFormField(
