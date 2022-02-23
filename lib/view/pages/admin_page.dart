@@ -54,6 +54,7 @@ class _AdminPageState extends State<AdminPage> {
 
   Widget eventsTab() {
     Event _event = Event(
+        "",
         "Testname",
         "Test Org",
         Address("Pulheim", "50259", "Plebanusstraße 25", "Mein Eigener Platz"),

@@ -1,6 +1,7 @@
 import 'address.dart';
 
 class Event {
+  String id;
   String name;
   String organisation;
   Address address;
@@ -13,6 +14,7 @@ class Event {
   String comment;
 
   Event(
+      this.id,
       this.name,
       this.organisation,
       this.address,

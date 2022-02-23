@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sandhasen_connect/data/model/address.dart';
+import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
+import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
 
 class NewEventPage extends StatefulWidget {
   const NewEventPage({Key? key}) : super(key: key);
@@ -10,6 +13,36 @@ class NewEventPage extends StatefulWidget {
 }
 
 class _NewEventPageState extends State<NewEventPage> {
+  TextEditingController nameCtr = TextEditingController();
+  TextEditingController orgCtr = TextEditingController();
+  TextEditingController placeCtr = TextEditingController();
+  TextEditingController streetCtr = TextEditingController();
+  TextEditingController plzCtr = TextEditingController();
+  TextEditingController cityCtr = TextEditingController();
+  TextEditingController mapsCtr = TextEditingController();
+  TextEditingController commentCtr = TextEditingController();
+
+  bool confirmed = false;
+  bool cancled = false;
+  bool ownAppointment = false;
+  bool ownApperance = false;
+
+  void save() {
+    Event event = Event(
+        "",
+        nameCtr.text,
+        orgCtr.text,
+        Address(cityCtr.text, streetCtr.text, plzCtr.text, placeCtr.text),
+        cancled,
+        confirmed,
+        ownApperance,
+        ownAppointment,
+        DateTime.now(),
+        DateTime.now(),
+        commentCtr.text);
+    EventViewModel.addEvent(event);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +57,7 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: null,
+                controller: nameCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -37,7 +70,7 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: null,
+                controller: orgCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -58,7 +91,7 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: null,
+                controller: placeCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -71,7 +104,7 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: null,
+                controller: streetCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -90,7 +123,7 @@ class _NewEventPageState extends State<NewEventPage> {
                       padding: const EdgeInsets.only(right: 8),
                       child: TextFormField(
                         keyboardType: TextInputType.text,
-                        controller: null,
+                        controller: plzCtr,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -104,7 +137,7 @@ class _NewEventPageState extends State<NewEventPage> {
                     flex: 6,
                     child: TextFormField(
                       keyboardType: TextInputType.text,
-                      controller: null,
+                      controller: cityCtr,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -120,7 +153,7 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: null,
+                controller: mapsCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -204,8 +237,13 @@ class _NewEventPageState extends State<NewEventPage> {
                       children: [
                         Align(
                             alignment: Alignment.centerLeft,
-                            child:
-                                Checkbox(value: false, onChanged: (value) {})),
+                            child: Checkbox(
+                                value: confirmed,
+                                onChanged: (value) {
+                                  setState(() {
+                                    confirmed = value!;
+                                  });
+                                })),
                         Align(
                             alignment: Alignment.centerLeft,
                             child: Text("Bestätigt")),
@@ -216,9 +254,14 @@ class _NewEventPageState extends State<NewEventPage> {
                     child: Row(
                       children: [
                         Align(
-                            alignment: Alignment.centerRight,
-                            child:
-                                Checkbox(value: false, onChanged: (value) {})),
+                            alignment: Alignment.centerLeft,
+                            child: Checkbox(
+                                value: cancled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    cancled = value!;
+                                  });
+                                })),
                         Align(
                             alignment: Alignment.centerRight,
                             child: Text("Abgesagt")),
@@ -237,8 +280,13 @@ class _NewEventPageState extends State<NewEventPage> {
                       children: [
                         Align(
                             alignment: Alignment.centerLeft,
-                            child:
-                                Checkbox(value: false, onChanged: (value) {})),
+                            child: Checkbox(
+                                value: ownAppointment,
+                                onChanged: (value) {
+                                  setState(() {
+                                    ownAppointment = value!;
+                                  });
+                                })),
                         Align(
                             alignment: Alignment.centerLeft,
                             child: Text("Anwesenheit")),
@@ -249,9 +297,14 @@ class _NewEventPageState extends State<NewEventPage> {
                     child: Row(
                       children: [
                         Align(
-                            alignment: Alignment.centerRight,
-                            child:
-                                Checkbox(value: false, onChanged: (value) {})),
+                            alignment: Alignment.centerLeft,
+                            child: Checkbox(
+                                value: ownApperance,
+                                onChanged: (value) {
+                                  setState(() {
+                                    ownApperance = value!;
+                                  });
+                                })),
                         Align(
                             alignment: Alignment.centerRight,
                             child: Text("Eigener Auftritt")),
@@ -264,9 +317,14 @@ class _NewEventPageState extends State<NewEventPage> {
                 height: 8,
               ),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  save();
+                },
                 icon: const Icon(Icons.save, size: 18),
                 label: const Text("Speichern"),
+              ),
+              const SizedBox(
+                height: 8,
               )
             ],
           ),
