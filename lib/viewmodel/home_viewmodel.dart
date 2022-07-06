@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/firebase/info_requests.dart';
 import 'package:sandhasen_connect/data/firebase/notification.dart';
 
-class InfoViewModel {
+class HomeViewModel {
   static FutureBuilder<DocumentSnapshot> getNews(currentContent) {
     return InfoRequest.readNewsData("news", currentContent);
   }

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
-import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
 
 class NewEventPage extends StatefulWidget {
@@ -317,6 +316,9 @@ class _NewEventPageState extends State<NewEventPage> {
                 height: 8,
               ),
               ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
+                ),
                 onPressed: () {
                   save();
                 },

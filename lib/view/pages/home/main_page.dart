@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
-import 'package:sandhasen_connect/view/fragments/admin_fragment.dart';
-import 'package:sandhasen_connect/view/fragments/events_fragment.dart';
-import 'package:sandhasen_connect/view/fragments/help_fragment.dart';
-import 'package:sandhasen_connect/view/fragments/impressum_fragment.dart';
-import 'package:sandhasen_connect/view/fragments/news_fragment.dart';
+import 'package:sandhasen_connect/view/fragments/admin/admin_fragment.dart';
+import 'package:sandhasen_connect/view/fragments/home/events_fragment.dart';
+import 'package:sandhasen_connect/view/fragments/home/help_fragment.dart';
+import 'package:sandhasen_connect/view/fragments/home/impressum_fragment.dart';
+import 'package:sandhasen_connect/view/fragments/home/news_fragment.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key, required this.title}) : super(key: key);

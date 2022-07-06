@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
-import 'package:sandhasen_connect/view/pages/event_page.dart';
+import 'package:sandhasen_connect/view/pages/home/event_page.dart';
 
 class EventListItem extends StatelessWidget {
   final Event _event;

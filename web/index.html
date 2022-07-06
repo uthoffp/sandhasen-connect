@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!--
-      If you are serving your web app in a path other than the root, change the
-      href value below to reflect the base path you are serving from.
-
-      The path provided below has to start and end with a slash "/" in order for
-      it to work correctly.
-
-      For more details:
-      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-      This is a placeholder for base href that will be replaced by the value of
-      the `--base-href` argument provided to `flutter build`.
-    -->
     <base href="$FLUTTER_BASE_HREF">
 
     <meta charset="UTF-8">
@@ -28,23 +15,11 @@
 
     <title>sandhasen_connect</title>
     <link rel="manifest" href="manifest.json">
+
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 </head>
 <body>
-<script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyD_K1BqtESTlhNT2yHxAmvdEV7BFKrC3qY",
-      authDomain: "sandhasen-connect.firebaseapp.com",
-      projectId: "sandhasen-connect",
-      storageBucket: "sandhasen-connect.appspot.com",
-      messagingSenderId: "128947226273",
-      appId: "1:128947226273:web:f0ed9b00e305f638de92e0",
-      measurementId: "G-NXNRT1D3Y5"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-
-</script>
 <!-- This script installs service_worker.js to provide PWA functionality to
      application. For more information, see:
      https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -111,6 +86,7 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+
 
 </script>
 

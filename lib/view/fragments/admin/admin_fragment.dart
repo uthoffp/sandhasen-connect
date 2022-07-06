@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
-import 'package:sandhasen_connect/view/pages/admin_page.dart';
-import 'package:sandhasen_connect/view/pages/main_page.dart';
+import 'package:sandhasen_connect/view/pages/admin/admin_page.dart';
+import 'package:sandhasen_connect/view/pages/home/main_page.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 
 class AdminFragment extends StatefulWidget {

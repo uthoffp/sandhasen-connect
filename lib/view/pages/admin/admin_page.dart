@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
-import 'package:sandhasen_connect/view/pages/newevent_page.dart';
-import 'package:sandhasen_connect/viewmodel/info_viewmodel.dart';
+import 'package:sandhasen_connect/view/pages/admin/newevent_page.dart';
+import 'package:sandhasen_connect/viewmodel/home_viewmodel.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _AdminPageState extends State<AdminPage> {
   void initState() {
     super.initState();
     setState(() {
-      InfoViewModel.getInfoString().then((value) => {
+      HomeViewModel.getInfoString().then((value) => {
             newsController.text = value!["news"],
             helpController.text = value["help"],
             impressumController.text = value["impressum"],
@@ -123,7 +123,7 @@ class _AdminPageState extends State<AdminPage> {
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          InfoViewModel.saveNews(
+                          HomeViewModel.saveNews(
                               newsController.text, _sendNewsNotification);
                         },
                         icon: const Icon(Icons.save, size: 18),
@@ -154,7 +154,7 @@ class _AdminPageState extends State<AdminPage> {
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          InfoViewModel.saveHelp(helpController.text);
+                          HomeViewModel.saveHelp(helpController.text);
                         },
                         icon: const Icon(Icons.save, size: 18),
                         label: const Text("Speichern"),
@@ -184,7 +184,7 @@ class _AdminPageState extends State<AdminPage> {
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          InfoViewModel.saveImpressum(impressumController.text);
+                          HomeViewModel.saveImpressum(impressumController.text);
                         },
                         icon: const Icon(Icons.save, size: 18),
                         label: const Text("Speichern"),
