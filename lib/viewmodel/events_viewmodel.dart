@@ -11,4 +11,8 @@ class EventViewModel {
   static Future<void> editEvent(Event event) async {
     return EventRequest.addEvent(event);
   }
+
+  static Future<List<Event>> getEvents() async {
+    return EventRequest.getEvents();
+  }
 }

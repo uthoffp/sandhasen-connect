@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
@@ -20,6 +19,9 @@ class _NewEventPageState extends State<NewEventPage> {
   TextEditingController cityCtr = TextEditingController();
   TextEditingController mapsCtr = TextEditingController();
   TextEditingController commentCtr = TextEditingController();
+  TextEditingController date = TextEditingController();
+  TextEditingController startTime = TextEditingController();
+  TextEditingController meetTime = TextEditingController();
 
   bool confirmed = false;
   bool cancled = false;
@@ -27,8 +29,12 @@ class _NewEventPageState extends State<NewEventPage> {
   bool ownApperance = false;
 
   void save() {
+    var date = _getDate();
+    var startTime = this.startTime.text;
+    var meetTime = this.meetTime.text;
+
     Event event = Event(
-        "",
+        "-1",
         nameCtr.text,
         orgCtr.text,
         Address(cityCtr.text, streetCtr.text, plzCtr.text, placeCtr.text),
@@ -36,10 +42,23 @@ class _NewEventPageState extends State<NewEventPage> {
         confirmed,
         ownApperance,
         ownAppointment,
-        DateTime.now(),
-        DateTime.now(),
+        DateTime.parse("$date $startTime"),
+        DateTime.parse("$date $meetTime"),
         commentCtr.text);
     EventViewModel.addEvent(event);
+  }
+
+  String _getDate() {
+    var orig = date.text;
+
+    if(orig.length == 10) {
+      var day = orig.substring(0, 2);
+      var month = orig.substring(3, 5);
+      var year = orig.substring(6, 10);
+      return "$year-$month-$day";
+    }
+
+    return "";
   }
 
   @override
@@ -82,7 +101,10 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               Align(
                 child: Text("Addresse",
-                    style: Theme.of(context).textTheme.headline6),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6),
                 alignment: Alignment.centerLeft,
               ),
               const SizedBox(
@@ -121,8 +143,9 @@ class _NewEventPageState extends State<NewEventPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: TextFormField(
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         controller: plzCtr,
+                        maxLength: 5,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -151,7 +174,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 height: 8,
               ),
               TextFormField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 controller: mapsCtr,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -165,20 +188,23 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               Align(
                 child: Text("Zeitpunkt",
-                    style: Theme.of(context).textTheme.headline6),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6),
                 alignment: Alignment.centerLeft,
               ),
               const SizedBox(
                 height: 8,
               ),
               TextFormField(
-                keyboardType: TextInputType.text,
-                controller: null,
+                keyboardType: TextInputType.number,
+                controller: date,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   hintText: "Datum",
-                  labelText: "Datum",
+                  labelText: "Datum (DD.MM.JJJJ)",
                 ),
               ),
               const SizedBox(
@@ -191,12 +217,12 @@ class _NewEventPageState extends State<NewEventPage> {
                       padding: const EdgeInsets.only(right: 4),
                       child: TextFormField(
                         keyboardType: TextInputType.text,
-                        controller: null,
+                        controller: meetTime,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           hintText: "Treffen",
-                          labelText: "Treffen",
+                          labelText: "Treffen (HH:MM)",
                         ),
                       ),
                     ),
@@ -206,12 +232,12 @@ class _NewEventPageState extends State<NewEventPage> {
                       padding: const EdgeInsets.only(left: 4),
                       child: TextFormField(
                         keyboardType: TextInputType.text,
-                        controller: null,
+                        controller: startTime,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           hintText: "Start",
-                          labelText: "Start",
+                          labelText: "Start (HH:MM)",
                         ),
                       ),
                     ),
@@ -223,7 +249,10 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               Align(
                 child:
-                    Text("Infos", style: Theme.of(context).textTheme.headline6),
+                Text("Infos", style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline6),
                 alignment: Alignment.centerLeft,
               ),
               const SizedBox(
@@ -317,7 +346,8 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
+                  minimumSize: const Size.fromHeight(
+                      40), // fromHeight use double.infinity as width and 40 is the height
                 ),
                 onPressed: () {
                   save();

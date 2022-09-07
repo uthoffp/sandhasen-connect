@@ -22,7 +22,7 @@ class _MainPageState extends State<MainPage> {
 
   _MainPageState();
 
-  // select fragment based on selectedFragment parameter. This gets called when one menue element gets clicked
+  // select fragment based on selectedFragment parameter. This gets called when one menu element gets clicked
   void selectDestination(int selectedFragment) {
     _selectedFragmentIndex = selectedFragment;
     setState(() {
@@ -33,11 +33,11 @@ class _MainPageState extends State<MainPage> {
           break;
         case 1:
           _title = Strings.menuEvents;
-          _contentWidget = EventsFragment();
+          _contentWidget = const EventsFragment();
           break;
         case 2:
           _title = Strings.menuAdmin;
-          _contentWidget = AdminFragment();
+          _contentWidget = const AdminFragment();
           break;
       }
     });

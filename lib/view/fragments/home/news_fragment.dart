@@ -25,7 +25,6 @@ class _NewsFragmentState extends State<NewsFragment> {
     return Future(() => null);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(

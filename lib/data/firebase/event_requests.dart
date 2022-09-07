@@ -23,4 +23,12 @@ class EventRequest {
       'comment': event.comment,
     });
   }
+
+  static Future<List<Event>> getEvents() async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('event')
+        .get();
+
+    return snapshot.docs.map((x) => Event.fromSnapshot(x.reference.id, x.data())).toList();
+  }
 }
