@@ -40,6 +40,4 @@ class _EventsFragmentState extends State<EventsFragment> {
       ),
     );
   }
-
-
 }

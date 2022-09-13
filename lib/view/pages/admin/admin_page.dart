@@ -75,16 +75,19 @@ class _AdminPageState extends State<AdminPage> {
             itemBuilder: (_, int index) => EventListItem(events[index], asAdmin: true),
             separatorBuilder: (_, int index) => const Divider(),
           ),
-          Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NewEventPage()));
-                  },
-                  child: const Icon(Icons.add))),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NewEventPage()));
+                    },
+                    child: const Icon(Icons.add))),
+          ),
         ],
       ),
     );
