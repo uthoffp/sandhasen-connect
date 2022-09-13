@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/pages/admin/newevent_page.dart';
 import 'package:sandhasen_connect/viewmodel/home_viewmodel.dart';
+
+import '../../../viewmodel/events_viewmodel.dart';
+import '../../widgets/eventlist_item.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -17,16 +19,28 @@ class _AdminPageState extends State<AdminPage> {
   TextEditingController newsController = TextEditingController();
   TextEditingController helpController = TextEditingController();
   TextEditingController impressumController = TextEditingController();
+  List<Event> events = [];
 
   @override
   void initState() {
     super.initState();
     setState(() {
+      _refresh();
       HomeViewModel.getInfoString().then((value) => {
             newsController.text = value!["news"],
             helpController.text = value["help"],
             impressumController.text = value["impressum"],
           });
+    });
+  }
+
+  Future<void> _refresh() async {
+    EventViewModel.getEvents().then((value) {
+      setState(() {
+        events = value;
+      });
+    }).onError((error, stackTrace) {
+
     });
   }
 
@@ -53,24 +67,14 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget eventsTab() {
-    Event _event = Event(
-        "",
-        "Testname",
-        "Test Org",
-        Address("Pulheim", "50259", "Plebanusstraße 25", "Mein Eigener Platz"),
-        false,
-        true,
-        true,
-        false,
-        DateTime.now(),
-        DateTime.now(),
-        "Test Comment");
-
     return Container(
-      padding: const EdgeInsets.all(16),
       child: Stack(
         children: [
-          ListView(),
+          ListView.separated(
+            itemCount: events.length,
+            itemBuilder: (_, int index) => EventListItem(events[index], asAdmin: true),
+            separatorBuilder: (_, int index) => const Divider(),
+          ),
           Align(
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(

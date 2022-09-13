@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandhasen_connect/data/firebase/notification.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
@@ -28,7 +29,40 @@ class _NewEventPageState extends State<NewEventPage> {
   bool ownAppointment = false;
   bool ownApperance = false;
 
-  void save() {
+  void onClickSave() {
+    showDialog(context: context, builder: (_) =>
+        AlertDialog(
+          title: const Text("Benachrichtigung senden?"),
+          content: const Text("Soll eine Benachrichtigung an die Benutzer der App gesendet werden?"),
+          actions: [
+            TextButton(
+              child: const Text("Abbrechen"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Nein"),
+              onPressed: () {
+                saveEvent();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Ja"),
+              onPressed: () {
+                saveEvent();
+                FirebaseNotification.sendNotification("Neuer Termin", "Es wurde ein neuer Termin eingestellt.");
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+  }
+
+  void saveEvent() {
     var date = _getDate();
     var startTime = this.startTime.text;
     var meetTime = this.meetTime.text;
@@ -51,7 +85,7 @@ class _NewEventPageState extends State<NewEventPage> {
   String _getDate() {
     var orig = date.text;
 
-    if(orig.length == 10) {
+    if (orig.length == 10) {
       var day = orig.substring(0, 2);
       var month = orig.substring(3, 5);
       var year = orig.substring(6, 10);
@@ -145,7 +179,6 @@ class _NewEventPageState extends State<NewEventPage> {
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: plzCtr,
-                        maxLength: 5,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -350,7 +383,7 @@ class _NewEventPageState extends State<NewEventPage> {
                       40), // fromHeight use double.infinity as width and 40 is the height
                 ),
                 onPressed: () {
-                  save();
+                  onClickSave();
                 },
                 icon: const Icon(Icons.save, size: 18),
                 label: const Text("Speichern"),

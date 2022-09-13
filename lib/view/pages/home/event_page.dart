@@ -18,7 +18,7 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Neuer Termin")),
+      appBar: AppBar(title: Text(widget.event.name)),
       body: SingleChildScrollView(
         child: Column(
           children: [],
