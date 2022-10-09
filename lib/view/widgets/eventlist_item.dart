@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/view/pages/admin/newevent_page.dart';
 import 'package:sandhasen_connect/view/pages/home/event_page.dart';
@@ -35,9 +36,15 @@ class EventListItem extends StatelessWidget {
     return EventPage(event: _event);
   }
 
+  String _formatDate() {
+    DateFormat formatter = DateFormat('EEEE, MM.dd.yyyy');
+    return formatter.format(_event.dateStart);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       child: Row(
         children: [
           Container(
@@ -52,7 +59,7 @@ class EventListItem extends StatelessWidget {
                   padding: const EdgeInsets.all(4), child: Text(_event.name)),
               Padding(
                   padding: const EdgeInsets.all(4),
-                  child: Text(_event.dateMeeting.toString())),
+                  child: Text(_formatDate())),
             ],
           ),
           const Spacer(),

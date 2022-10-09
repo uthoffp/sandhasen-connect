@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 
 class EventRequest {
+  bool isFromCache = false;
+
   static Future<void> addEvent(Event event) {
     CollectionReference eventRef =
         FirebaseFirestore.instance.collection('event');

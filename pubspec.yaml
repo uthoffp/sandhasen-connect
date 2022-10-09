@@ -20,6 +20,7 @@ dependencies:
   flutter_html: ^2.2.1
   http: ^0.13.4
   url_launcher: ^6.1.5
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

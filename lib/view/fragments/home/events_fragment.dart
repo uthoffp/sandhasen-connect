@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/view/widgets/eventlist_item.dart';
+import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
 
 class EventsFragment extends StatefulWidget {
@@ -25,7 +26,9 @@ class _EventsFragmentState extends State<EventsFragment> {
         events = value;
       });
     }).onError((error, stackTrace) {
-
+      setState(() {
+        Message.show(context, "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.");
+      });
     });
   }
 

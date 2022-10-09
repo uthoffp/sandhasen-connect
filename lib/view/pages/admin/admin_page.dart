@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/pages/admin/newevent_page.dart';
+import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/home_viewmodel.dart';
 
 import '../../../viewmodel/events_viewmodel.dart';
@@ -40,7 +41,7 @@ class _AdminPageState extends State<AdminPage> {
         events = value;
       });
     }).onError((error, stackTrace) {
-
+      Message.show(context, "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.");
     });
   }
 
