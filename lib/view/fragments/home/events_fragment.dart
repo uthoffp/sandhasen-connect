@@ -21,13 +21,13 @@ class _EventsFragmentState extends State<EventsFragment> {
   }
 
   Future<void> _refresh() async {
-    EventViewModel.getEvents().then((value) {
+    EventViewModel().getEvents().then((value) {
       setState(() {
         events = value;
       });
     }).onError((error, stackTrace) {
       setState(() {
-        Message.show(context, "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.");
+        Message.show(context, "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.");
       });
     });
   }

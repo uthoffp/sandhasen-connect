@@ -36,7 +36,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Future<void> _refresh() async {
-    EventViewModel.getEvents().then((value) {
+    EventViewModel().getEvents().then((value) {
       setState(() {
         events = value;
       });

@@ -26,10 +26,12 @@ class EventRequest {
     });
   }
 
-  static Future<List<Event>> getEvents() async {
+  Future<List<Event>> getEvents() async {
     var snapshot = await FirebaseFirestore.instance
         .collection('event')
         .get();
+
+    isFromCache = snapshot.metadata.isFromCache;
 
     return snapshot.docs.map((x) => Event.fromSnapshot(x.reference.id, x.data())).toList();
   }
