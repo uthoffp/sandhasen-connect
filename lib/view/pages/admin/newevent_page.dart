@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/firebase/notification.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
+import 'package:sandhasen_connect/resources/strings.dart';
+import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
 
 class NewEventPage extends StatefulWidget {
@@ -23,26 +25,41 @@ class _NewEventPageState extends State<NewEventPage> {
   TextEditingController date = TextEditingController();
   TextEditingController startTime = TextEditingController();
   TextEditingController meetTime = TextEditingController();
+  TextEditingController notificationTextCtr = TextEditingController();
 
   bool confirmed = false;
   bool cancled = false;
   bool ownAppointment = false;
   bool ownApperance = false;
 
-  void onClickSave() {
+  void showNotificationDialog() {
     showDialog(context: context, builder: (_) =>
         AlertDialog(
-          title: const Text("Benachrichtigung senden?"),
-          content: const Text("Soll eine Benachrichtigung an die Benutzer der App gesendet werden?"),
+          title: const Text(Strings.dialogHeadNotification),
+          content: Row(
+            children: [
+              const Text(Strings.dialogBodyNotification),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: orgCtr,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  hintText: Strings.dialogTextFieldNotificationHint,
+                  labelText: Strings.dialogTextFieldNotificationLabel,
+                ),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
-              child: const Text("Abbrechen"),
+              child: const Text(Strings.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text("Nein"),
+              child: const Text(Strings.no),
               onPressed: () {
                 saveEvent();
                 Navigator.of(context).pop();
@@ -50,16 +67,14 @@ class _NewEventPageState extends State<NewEventPage> {
               },
             ),
             TextButton(
-              child: const Text("Ja"),
+              child: const Text(Strings.yes),
               onPressed: () {
                 saveEvent();
-                FirebaseNotification.sendNotification("Neuer Termin", "Es wurde ein neuer Termin eingestellt.");
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
               },
             )
           ],
-        ));
+        )
+    );
   }
 
   void saveEvent() {
@@ -78,8 +93,24 @@ class _NewEventPageState extends State<NewEventPage> {
         ownAppointment,
         DateTime.parse("$date $startTime"),
         DateTime.parse("$date $meetTime"),
-        commentCtr.text);
-    EventViewModel.addEvent(event);
+        commentCtr.text
+    );
+
+    EventViewModel.addEvent(event)
+        .then((value) {
+          String notificationText = notificationTextCtr.text;
+          FirebaseNotification.sendNotification(
+              Strings.newEvent,
+              notificationText.isNotEmpty
+                  ? notificationText : Strings.notificationBodyNewEvent);
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        })
+        .onError((error, stackTrace) {
+          setState(() {
+            Message.show(context, Strings.errorSave);
+          });
+        });
   }
 
   String _getDate() {
@@ -98,7 +129,7 @@ class _NewEventPageState extends State<NewEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Neuer Termin")),
+      appBar: AppBar(title: const Text(Strings.newEvent)),
       body: Container(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: SingleChildScrollView(
@@ -113,8 +144,8 @@ class _NewEventPageState extends State<NewEventPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: "Name des Termins",
-                  labelText: "Name",
+                  hintText: Strings.eventName,
+                  labelText: Strings.name,
                 ),
               ),
               const SizedBox(
@@ -126,15 +157,15 @@ class _NewEventPageState extends State<NewEventPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: "Organisator",
-                  labelText: "Organisator",
+                  hintText: Strings.organisator,
+                  labelText: Strings.organisator,
                 ),
               ),
               const SizedBox(
                 height: 16,
               ),
               Align(
-                child: Text("Addresse",
+                child: Text(Strings.address,
                     style: Theme
                         .of(context)
                         .textTheme
@@ -150,8 +181,8 @@ class _NewEventPageState extends State<NewEventPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: "Ort",
-                  labelText: "Ort",
+                  hintText: Strings.place,
+                  labelText: Strings.place,
                 ),
               ),
               const SizedBox(
@@ -163,8 +194,8 @@ class _NewEventPageState extends State<NewEventPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: "Straße, Nr.",
-                  labelText: "Straße, Nr.",
+                  hintText: Strings.street,
+                  labelText: Strings.street,
                 ),
               ),
               const SizedBox(
@@ -182,8 +213,8 @@ class _NewEventPageState extends State<NewEventPage> {
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
-                          hintText: "Postleitzahl",
-                          labelText: "Postleitzahl",
+                          hintText: Strings.postcode,
+                          labelText: Strings.postcode,
                         ),
                       ),
                     ),
@@ -196,8 +227,8 @@ class _NewEventPageState extends State<NewEventPage> {
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        hintText: "Stadt",
-                        labelText: "Stadt",
+                        hintText: Strings.city,
+                        labelText: Strings.city,
                       ),
                     ),
                   ),
@@ -212,15 +243,15 @@ class _NewEventPageState extends State<NewEventPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: "Google Maps URL",
-                  labelText: "Google Maps URL",
+                  hintText: Strings.mapsUrl,
+                  labelText: Strings.mapsUrl,
                 ),
               ),
               const SizedBox(
                 height: 16,
               ),
               Align(
-                child: Text("Zeitpunkt",
+                child: Text(Strings.time,
                     style: Theme
                         .of(context)
                         .textTheme
@@ -282,7 +313,7 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               Align(
                 child:
-                Text("Infos", style: Theme
+                Text(Strings.menuInfo, style: Theme
                     .of(context)
                     .textTheme
                     .headline6),
@@ -305,9 +336,9 @@ class _NewEventPageState extends State<NewEventPage> {
                                     confirmed = value!;
                                   });
                                 })),
-                        Align(
+                        const Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Bestätigt")),
+                            child: Text(Strings.confirmed)),
                       ],
                     ),
                   ),
@@ -323,9 +354,9 @@ class _NewEventPageState extends State<NewEventPage> {
                                     cancled = value!;
                                   });
                                 })),
-                        Align(
+                        const Align(
                             alignment: Alignment.centerRight,
-                            child: Text("Abgesagt")),
+                            child: Text(Strings.cancled)),
                       ],
                     ),
                   ),
@@ -348,9 +379,9 @@ class _NewEventPageState extends State<NewEventPage> {
                                     ownAppointment = value!;
                                   });
                                 })),
-                        Align(
+                        const Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Anwesenheit")),
+                            child: Text(Strings.ownAppointment)),
                       ],
                     ),
                   ),
@@ -366,9 +397,9 @@ class _NewEventPageState extends State<NewEventPage> {
                                     ownApperance = value!;
                                   });
                                 })),
-                        Align(
+                        const Align(
                             alignment: Alignment.centerRight,
-                            child: Text("Eigener Auftritt")),
+                            child: Text(Strings.apperance)),
                       ],
                     ),
                   ),
@@ -379,14 +410,13 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(
-                      40), // fromHeight use double.infinity as width and 40 is the height
+                  minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
                 ),
                 onPressed: () {
-                  onClickSave();
+                  showNotificationDialog();
                 },
                 icon: const Icon(Icons.save, size: 18),
-                label: const Text("Speichern"),
+                label: const Text(Strings.save),
               ),
               const SizedBox(
                 height: 8,

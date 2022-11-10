@@ -15,13 +15,13 @@ Future<void> main() async {
   } else {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyD_K1BqtESTlhNT2yHxAmvdEV7BFKrC3qY",
-        databaseURL: "https://sandhasen-connect.firebaseio.com",
-        appId: "1:128947226273:web:f0ed9b00e305f638de92e0",
-        messagingSenderId: "G-NXNRT1D3Y5",
-        projectId: "sandhasen-connect",
-        authDomain: "sandhasen-connect.firebaseapp.com",
-        storageBucket: "sandhasen-connect.appspot.com",
+        apiKey: Strings.firebaseApiKey,
+        databaseURL: "https://${Strings.appIdentifyer}.firebaseio.com",
+        appId: Strings.firebaseAppId,
+        messagingSenderId: Strings.firebaseMessagingSenderId,
+        projectId: Strings.appIdentifyer,
+        authDomain: "${Strings.appIdentifyer}.firebaseapp.com",
+        storageBucket: "${Strings.appIdentifyer}.appspot.com",
       ),
     );
   }

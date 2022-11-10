@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
+import 'package:sandhasen_connect/extensions/date_extension.dart';
+import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/widgets/eventlist_item.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
@@ -12,7 +14,9 @@ class EventsFragment extends StatefulWidget {
 }
 
 class _EventsFragmentState extends State<EventsFragment> {
-  List<Event> events = List.empty();
+  List<List<Event>> events = List.empty();
+  EventViewModel eventViewModel = EventViewModel();
+  String lastUpdated = "";
 
   @override
   void initState() {
@@ -21,26 +25,36 @@ class _EventsFragmentState extends State<EventsFragment> {
   }
 
   Future<void> _refresh() async {
-    EventViewModel().getEvents().then((value) {
+    eventViewModel.getEvents().then((value) {
       setState(() {
         events = value;
+        lastUpdated = eventViewModel.lastUpdate.toGermanDateFormat;
+
+        if(eventViewModel.isFromCache) {
+          Message.show(context, Strings.errorRequest);
+        }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        Message.show(context, "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.");
+        Message.show(context, Strings.errorRequest);
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _refresh,
-      child: ListView.separated(
-        itemCount: events.length,
-        itemBuilder: (_, int index) => EventListItem(events[index]), 
-        separatorBuilder: (_, int index) => const Divider(),
-      ),
+    return Stack(
+      children: [
+        Align(alignment: Alignment.topRight, child: Text("${Strings.state} $lastUpdated")),
+        RefreshIndicator(
+          onRefresh: _refresh,
+          child: ListView.separated(
+            itemCount: events.length,
+            itemBuilder: (_, int index) => EventListItem(events[index][0], withTopPadding: index == 0),
+            separatorBuilder: (_, int index) => const Divider(),
+          ),
+        ),
+      ]
     );
   }
 }

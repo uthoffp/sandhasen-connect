@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //dropdown widget which shows an outlined textfield and displays a menu dialog when clicked as dropdown menue
@@ -9,13 +8,13 @@ class DropDownInputField<T> extends StatefulWidget {
   final TextEditingController controller;
   bool showInitValue;
 
-  DropDownInputField({
+  DropDownInputField({Key? key,
     this.hint,
     required this.options,
     required this.controller,
     this.onChanged,
     required this.showInitValue,
-  });
+  }) : super(key: key);
 
   @override
   State<DropDownInputField<T>> createState() => _DropDownInputFieldState<T>();
@@ -27,6 +26,7 @@ class _DropDownInputFieldState<T> extends State<DropDownInputField<T>> {
 
   @override
   void initState() {
+    super.initState();
     setState(() {
       widget.controller.text = widget.showInitValue && widget.options[0] != null  ? widget.options[0].toString() : "";
     });

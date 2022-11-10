@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/fragments/admin/admin_fragment.dart';
@@ -53,9 +52,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_title),
@@ -65,7 +61,7 @@ class _MainPageState extends State<MainPage> {
               if (value == 0)
                 {
                   showAboutDialog(
-                      context: context, children: [ImpressumFragment()])
+                      context: context, children: [const ImpressumFragment()])
                 }
               else
                 {
@@ -78,7 +74,7 @@ class _MainPageState extends State<MainPage> {
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text("Abbrechen"))
+                                child: const Text(Strings.cancel))
                           ],
                         );
                       })

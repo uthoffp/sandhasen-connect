@@ -2,18 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/firebase/info_requests.dart';
 import 'package:sandhasen_connect/data/firebase/notification.dart';
+import 'package:sandhasen_connect/resources/strings.dart';
 
 class HomeViewModel {
   static FutureBuilder<DocumentSnapshot> getNews(currentContent) {
-    return InfoRequest.readNewsData("news", currentContent);
+    return InfoRequest.readNewsData(Strings.news, currentContent);
   }
 
   static FutureBuilder<DocumentSnapshot> getHelp(currentContent) {
-    return InfoRequest.readNewsData("help", currentContent);
+    return InfoRequest.readNewsData(Strings.help, currentContent);
   }
 
   static FutureBuilder<DocumentSnapshot> getImpressum(currentContent) {
-    return InfoRequest.readNewsData("impressum", currentContent);
+    return InfoRequest.readNewsData(Strings.impressum, currentContent);
   }
 
   static Future<Map<String, dynamic>?> getInfoString() {
@@ -21,18 +22,18 @@ class HomeViewModel {
   }
 
   static saveNews(String text, bool notify) {
-    InfoRequest.saveInfoData("news", text);
+    InfoRequest.saveInfoData(Strings.news, text);
     if (notify) {
       FirebaseNotification.sendNotification(
-          "Neuigkeiten", "Es gibt Neuigkeiten in der App.");
+          Strings.notificationHeaderNews, Strings.notificationBodyNews);
     }
   }
 
   static saveHelp(String text) {
-    InfoRequest.saveInfoData("help", text);
+    InfoRequest.saveInfoData(Strings.help, text);
   }
 
   static saveImpressum(String text) {
-    InfoRequest.saveInfoData("impressum", text);
+    InfoRequest.saveInfoData(Strings.impressum, text);
   }
 }

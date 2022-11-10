@@ -20,7 +20,7 @@ class _AdminPageState extends State<AdminPage> {
   TextEditingController newsController = TextEditingController();
   TextEditingController helpController = TextEditingController();
   TextEditingController impressumController = TextEditingController();
-  List<Event> events = [];
+  List<List<Event>> events = [];
 
   @override
   void initState() {
@@ -28,9 +28,9 @@ class _AdminPageState extends State<AdminPage> {
     setState(() {
       _refresh();
       HomeViewModel.getInfoString().then((value) => {
-            newsController.text = value!["news"],
-            helpController.text = value["help"],
-            impressumController.text = value["impressum"],
+            newsController.text = value![Strings.news],
+            helpController.text = value[Strings.help],
+            impressumController.text = value[Strings.impressum],
           });
     });
   }
@@ -41,7 +41,10 @@ class _AdminPageState extends State<AdminPage> {
         events = value;
       });
     }).onError((error, stackTrace) {
-      Message.show(context, "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.");
+      setState(() {
+        Message.show(context, Strings.errorRequest);
+      });
+
     });
   }
 
@@ -54,7 +57,7 @@ class _AdminPageState extends State<AdminPage> {
           title: const Text(Strings.menuAdmin),
           bottom: const TabBar(
             indicatorColor: Colors.white,
-            tabs: [Tab(text: 'Termine'), Tab(text: 'Info')],
+            tabs: [Tab(text: Strings.menuEvents), Tab(text: Strings.menuInfo)],
           ),
         ),
         body: TabBarView(
@@ -68,29 +71,32 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget eventsTab() {
-    return Container(
-      child: Stack(
-        children: [
-          ListView.separated(
-            itemCount: events.length,
-            itemBuilder: (_, int index) => EventListItem(events[index], asAdmin: true),
-            separatorBuilder: (_, int index) => const Divider(),
+    return Stack(
+      children: [
+        ListView.separated(
+          itemCount: events.length,
+          separatorBuilder: (_, int index) => const Divider(),
+          itemBuilder: (_, int index) =>
+              ListView.separated(
+                itemCount: events[index].length,
+                itemBuilder: (_, int index2) => EventListItem(events[index][index2], asAdmin: true),
+                separatorBuilder: (_, int index) => const Divider(),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: FloatingActionButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NewEventPage()));
-                    },
-                    child: const Icon(Icons.add))),
-          ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NewEventPage()));
+                  },
+                  child: const Icon(Icons.add))),
+        ),
+      ],
     );
   }
 
@@ -117,7 +123,7 @@ class _AdminPageState extends State<AdminPage> {
                   ),
                   Row(
                     children: [
-                      const Text("Änderungsbenachrichtigung senden"),
+                      const Text(Strings.sendNotification),
                       Switch(
                           value: _sendNewsNotification,
                           onChanged: (bool value) {
@@ -135,7 +141,7 @@ class _AdminPageState extends State<AdminPage> {
                               newsController.text, _sendNewsNotification);
                         },
                         icon: const Icon(Icons.save, size: 18),
-                        label: const Text("Speichern"),
+                        label: const Text(Strings.save),
                       ))
                 ],
               ),
@@ -165,7 +171,7 @@ class _AdminPageState extends State<AdminPage> {
                           HomeViewModel.saveHelp(helpController.text);
                         },
                         icon: const Icon(Icons.save, size: 18),
-                        label: const Text("Speichern"),
+                        label: const Text(Strings.save),
                       ))
                 ],
               ),
@@ -195,7 +201,7 @@ class _AdminPageState extends State<AdminPage> {
                           HomeViewModel.saveImpressum(impressumController.text);
                         },
                         icon: const Icon(Icons.save, size: 18),
-                        label: const Text("Speichern"),
+                        label: const Text(Strings.save),
                       ))
                 ],
               ),

@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/pages/admin/admin_page.dart';
-import 'package:sandhasen_connect/view/pages/home/main_page.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 
 class AdminFragment extends StatefulWidget {
@@ -15,14 +13,13 @@ class AdminFragment extends StatefulWidget {
 class _AdminFragmentState extends State<AdminFragment> {
   final _passwordController = TextEditingController();
   bool _pwVisible = false;
-  final String adminPw = "Montag123";
 
   void login() {
-    if (_passwordController.text == adminPw) {
+    if (_passwordController.text == Strings.adminPassword) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const AdminPage()));
     } else {
-      Message.show(context, "Password falsch.");
+      Message.show(context, Strings.errorWrongPassword);
     }
   }
 
@@ -60,7 +57,7 @@ class _AdminFragmentState extends State<AdminFragment> {
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
                 onPressed: () => login(),
-                child: const Text('Anmelden'),
+                child: const Text(Strings.login),
               ),
             )
           ],
