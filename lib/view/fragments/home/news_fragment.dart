@@ -1,15 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/viewmodel/home_viewmodel.dart';
 
-class NewsFragment extends StatefulWidget {
-  const NewsFragment({Key? key}) : super(key: key);
+import 'fragment_interface.dart';
+
+class NewsFragment extends StatefulWidget implements Fragment{
+  NewsFragment({Key? key}) : super(key: key);
+  _NewsFragmentState? state;
 
   @override
-  State<StatefulWidget> createState() => _NewsFragmentState();
+  State<StatefulWidget> createState() => state = _NewsFragmentState();
+
+  @override
+  Future<void> refresh() async {
+    state?.refresh();
+  }
 }
 
-class _NewsFragmentState extends State<NewsFragment> {
+class _NewsFragmentState extends State<NewsFragment>{
   Widget _content = Container();
 
   @override
@@ -18,7 +25,7 @@ class _NewsFragmentState extends State<NewsFragment> {
     _content = HomeViewModel.getNews(_content);
   }
 
-  Future<void> _refresh() {
+  Future<void> refresh() {
     setState(() {
       _content = HomeViewModel.getNews(_content);
     });
@@ -28,7 +35,7 @@ class _NewsFragmentState extends State<NewsFragment> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: _refresh,
+      onRefresh: refresh,
       child: ListView(
         children: [
           _content

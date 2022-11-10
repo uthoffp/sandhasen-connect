@@ -6,6 +6,8 @@ import 'package:sandhasen_connect/view/fragments/home/help_fragment.dart';
 import 'package:sandhasen_connect/view/fragments/home/impressum_fragment.dart';
 import 'package:sandhasen_connect/view/fragments/home/news_fragment.dart';
 
+import '../../fragments/home/fragment_interface.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -15,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  Widget _contentWidget = const NewsFragment();
+  Fragment _contentWidget = NewsFragment();
   String _title = Strings.menuNews;
   int _selectedFragmentIndex = 0;
 
@@ -28,11 +30,11 @@ class _MainPageState extends State<MainPage> {
       switch (selectedFragment) {
         case 0:
           _title = Strings.menuNews;
-          _contentWidget = const NewsFragment();
+          _contentWidget = NewsFragment();
           break;
         case 1:
           _title = Strings.menuEvents;
-          _contentWidget = const EventsFragment();
+          _contentWidget = EventsFragment();
           break;
         case 2:
           _title = Strings.menuAdmin;
@@ -46,7 +48,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     setState(() {
-      _contentWidget = const NewsFragment();
+      _contentWidget = NewsFragment();
     });
   }
 
@@ -56,8 +58,12 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text(_title),
         actions: [
+          _title != Strings.menuAdmin ? IconButton(
+              onPressed: () => _contentWidget.refresh(),
+              icon: const Icon(Icons.refresh)) : Container(),
           PopupMenuButton(
-            onSelected: (value) => {
+            onSelected: (value) =>
+            {
               if (value == 0)
                 {
                   showAboutDialog(
@@ -81,7 +87,8 @@ class _MainPageState extends State<MainPage> {
                 }
             },
             icon: const Icon(Icons.more_vert),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            itemBuilder: (BuildContext context) =>
+            <PopupMenuEntry>[
               const PopupMenuItem(child: Text(Strings.menuImpressum), value: 0),
               const PopupMenuItem(child: Text(Strings.menuHelp), value: 1)
             ],

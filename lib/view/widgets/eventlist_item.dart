@@ -10,7 +10,8 @@ class EventListItem extends StatelessWidget {
   final bool asAdmin;
   final bool withTopPadding;
 
-  const EventListItem(this._event, {this.asAdmin = false, this.withTopPadding = false,Key? key})
+  const EventListItem(this._event,
+      {this.asAdmin = false, this.withTopPadding = false, Key? key})
       : super(key: key);
 
   Color _setStatusColor() {
@@ -57,8 +58,9 @@ class EventListItem extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.all(4), child: Text(_event.name)),
                 Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(_event.dateStart.toGermanDateFormatWithTime),)
+                  padding: const EdgeInsets.all(4),
+                  child: Text(_event.dateStart.toGermanDateFormatWithTime),
+                )
               ],
             ),
             const Spacer(),

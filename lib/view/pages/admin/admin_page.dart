@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/pages/admin/newevent_page.dart';
+import 'package:sandhasen_connect/view/widgets/eventlist.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/home_viewmodel.dart';
 
@@ -44,7 +45,6 @@ class _AdminPageState extends State<AdminPage> {
       setState(() {
         Message.show(context, Strings.errorRequest);
       });
-
     });
   }
 
@@ -73,16 +73,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget eventsTab() {
     return Stack(
       children: [
-        ListView.separated(
-          itemCount: events.length,
-          separatorBuilder: (_, int index) => const Divider(),
-          itemBuilder: (_, int index) =>
-              ListView.separated(
-                itemCount: events[index].length,
-                itemBuilder: (_, int index2) => EventListItem(events[index][index2], asAdmin: true),
-                separatorBuilder: (_, int index) => const Divider(),
-          ),
-        ),
+        Eventlist(events: events, onRefresh: _refresh, asAdmin: true,),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Align(

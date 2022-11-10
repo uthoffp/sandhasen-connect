@@ -36,17 +36,21 @@ class _NewEventPageState extends State<NewEventPage> {
     showDialog(context: context, builder: (_) =>
         AlertDialog(
           title: const Text(Strings.dialogHeadNotification),
-          content: Row(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(Strings.dialogBodyNotification),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                controller: orgCtr,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: Strings.dialogTextFieldNotificationHint,
-                  labelText: Strings.dialogTextFieldNotificationLabel,
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: notificationTextCtr,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    hintText: Strings.dialogTextFieldNotification,
+                    labelText: Strings.dialogTextFieldNotification,
+                  ),
                 ),
               ),
             ],

@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/extensions/date_extension.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
-import 'package:sandhasen_connect/view/widgets/eventlist_item.dart';
+import 'package:sandhasen_connect/view/fragments/home/fragment_interface.dart';
+import 'package:sandhasen_connect/view/widgets/eventlist.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
 
-class EventsFragment extends StatefulWidget {
-  const EventsFragment({Key? key}) : super(key: key);
+import '../../../resources/themes.dart';
+
+class EventsFragment extends StatefulWidget implements Fragment {
+  EventsFragment({Key? key}) : super(key: key);
+  _EventsFragmentState? state;
 
   @override
-  State<StatefulWidget> createState() => _EventsFragmentState();
+  State<StatefulWidget> createState() => state = _EventsFragmentState();
+
+  @override
+  Future<void> refresh() async {
+    state?.refresh();
+  }
 }
 
 class _EventsFragmentState extends State<EventsFragment> {
@@ -21,17 +30,19 @@ class _EventsFragmentState extends State<EventsFragment> {
   @override
   void initState() {
     super.initState();
-    _refresh();
+    refresh();
   }
 
-  Future<void> _refresh() async {
+  Future<void> refresh() async {
     eventViewModel.getEvents().then((value) {
       setState(() {
         events = value;
-        lastUpdated = eventViewModel.lastUpdate.toGermanDateFormat;
-
-        if(eventViewModel.isFromCache) {
+        lastUpdated = eventViewModel.lastUpdate.toGermanDateFormatWithTime;
+        if (eventViewModel.isFromCache) {
           Message.show(context, Strings.errorRequest);
+        } else {
+          Message.show(context, Strings.successRefresh,
+              bgColor: Themes.eventConfirmedColor);
         }
       });
     }).onError((error, stackTrace) {
@@ -43,18 +54,15 @@ class _EventsFragmentState extends State<EventsFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Align(alignment: Alignment.topRight, child: Text("${Strings.state} $lastUpdated")),
-        RefreshIndicator(
-          onRefresh: _refresh,
-          child: ListView.separated(
-            itemCount: events.length,
-            itemBuilder: (_, int index) => EventListItem(events[index][0], withTopPadding: index == 0),
-            separatorBuilder: (_, int index) => const Divider(),
-          ),
-        ),
-      ]
-    );
+    return Stack(children: [
+      Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text("${Strings.state} $lastUpdated",
+                style: Theme.of(context).textTheme.caption),
+          )),
+      Eventlist(events: events, onRefresh: refresh)
+    ]);
   }
 }

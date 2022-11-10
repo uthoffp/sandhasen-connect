@@ -6,7 +6,7 @@ extension MyDates on DateTime {
 
   String get toGermanDateFormatWithDay => DateFormat('EEEE, dd.MM.yyyy').format(this);
 
-  String get toGermanDateFormatWithTime => DateFormat('dd.MM.yyyy HH:mm').format(this);
+  String get toGermanDateFormatWithTime => DateFormat('dd.MM.yyyy, HH:mm').format(this);
 
   String get toMonthYearFormat => DateFormat("MMMM yyyy").format(this);
 }

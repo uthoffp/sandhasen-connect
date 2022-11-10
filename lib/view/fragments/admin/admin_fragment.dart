@@ -3,11 +3,18 @@ import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/pages/admin/admin_page.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 
-class AdminFragment extends StatefulWidget {
+import '../home/fragment_interface.dart';
+
+class AdminFragment extends StatefulWidget implements Fragment{
   const AdminFragment({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AdminFragmentState();
+
+  @override
+  Future<void> refresh() async {
+    createState();
+  }
 }
 
 class _AdminFragmentState extends State<AdminFragment> {

@@ -1,5 +1,4 @@
 class Strings {
-
   // ------------- App Config -------------
   static const String appName = "Sandhasen Connect";
   static const String appIdentifyer = "sandhasen-connect";
@@ -12,11 +11,14 @@ class Strings {
   static const String help = "help";
 
   // ------------- Firebase Config -------------
-  static const String firebaseAuthKey = "key=AAAAHgXahqE:APA91bHSBvJ0xxihy1fe0Wfv56Ffax1gEkobV4PAO_XPct7rHeCapplm1yoBHXii2Rg-3UrlTX1lFptrJLcArk9Ddl42VIwWsDV2l8aWIlUfrnTQAcMkFbJKnCe_4tOD4Ra3PEPzYsNp";
+  static const String firebaseAuthKey =
+      "key=AAAAHgXahqE:APA91bHSBvJ0xxihy1fe0Wfv56Ffax1gEkobV4PAO_XPct7rHeCapplm1yoBHXii2Rg-3UrlTX1lFptrJLcArk9Ddl42VIwWsDV2l8aWIlUfrnTQAcMkFbJKnCe_4tOD4Ra3PEPzYsNp";
   static const String firebaseFcmUrl = "https://fcm.googleapis.com/fcm/send";
-  static const String firebaseAppId = "1:128947226273:web:f0ed9b00e305f638de92e0";
+  static const String firebaseAppId =
+      "1:128947226273:web:f0ed9b00e305f638de92e0";
   static const String firebaseMessagingSenderId = "G-NXNRT1D3Y5";
-  static const String firebaseApiKey = "AIzaSyD_K1BqtESTlhNT2yHxAmvdEV7BFKrC3qY";
+  static const String firebaseApiKey =
+      "AIzaSyD_K1BqtESTlhNT2yHxAmvdEV7BFKrC3qY";
 
   // ------------- Menu -------------
   static const String menuNews = "Aktuelles";
@@ -60,18 +62,25 @@ class Strings {
   static const String city = "Stadt";
   static const String mapsUrl = "Google Maps URL";
   static const String dialogHeadNotification = "Benachrichtigung senden?";
-  static const String dialogBodyNotification = "Soll eine Benachrichtigung an die Benutzer der App gesendet werden?";
-  static const String dialogTextFieldNotificationHint = "Benachrichtigung an die Mitglieder (optional)";
-  static const String dialogTextFieldNotificationLabel = "Benachrichtigungstext";
+  static const String dialogBodyNotification =
+      "Soll eine Benachrichtigung an die Benutzer der App gesendet werden?";
+  static const String dialogTextFieldNotification =
+      "Benachrichtigungstext (optional)";
+
+  static const successRefresh = "Die Termine wurden erfolgrich aktualisiert.";
 
   // ------------- Notifications -------------
   static const notificationHeaderNews = "Neuigkeiten";
   static const notificationBodyNews = "Es gibt Neuigkeiten in der App.";
-  static const notificationBodyNewEvent = "Es wurde ein neuer Termin eingestellt.";
+  static const notificationBodyNewEvent =
+      "Es wurde ein neuer Termin eingestellt.";
 
   // ------------- Error messages -------------
-  static const String errorRequest = "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.";
+  static const String errorRequest =
+      "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.";
   static const String errorWrongPassword = "Password falsch.";
-  static const String errorMapOpen = "Beim Öffnen der Karte ist ein Fehler aufgetreten.";
-  static const String errorSave = "Beim Speichern ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.";
+  static const String errorMapOpen =
+      "Beim Öffnen der Karte ist ein Fehler aufgetreten.";
+  static const String errorSave =
+      "Beim Speichern ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.";
 }
