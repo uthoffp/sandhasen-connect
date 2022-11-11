@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import 'address.dart';
 
@@ -33,5 +32,9 @@ class Event {
       DateTime.fromMicrosecondsSinceEpoch((snapshot['dateMeeting'] as Timestamp).microsecondsSinceEpoch),
       snapshot['comment'],
     );
+  }
+
+  String toMapsLocation() {
+    return address.toMapsLocation();
   }
 }

@@ -14,4 +14,8 @@ class Address {
       snapshot['place'],
     );
   }
+
+  String toMapsLocation() {
+    return "$street, $postcode $city";
+  }
 }

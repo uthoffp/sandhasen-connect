@@ -41,8 +41,7 @@ class EventListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return InkWell(
       child: Padding(
         padding: EdgeInsets.only(top: withTopPadding ? 16.0 : 0.0),
         child: Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
@@ -18,16 +19,8 @@ class _EventPageState extends State<EventPage> {
     super.initState();
   }
 
-  Future<void> openMap(String url) async {
-    Uri uri = Uri.parse(url);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      setState(() {
-        Message.show(context, Strings.errorMapOpen);
-      });
-    }
+  void openMap() {
+    MapsLauncher.launchQuery(widget.event.toMapsLocation());
   }
 
   @override
@@ -49,7 +42,7 @@ class _EventPageState extends State<EventPage> {
               Text(widget.event.address.street),
               Text("${widget.event.address.postcode} ${widget.event.address.city}"),
               TextButton(
-                  onPressed: () => openMap(widget.event.id), child: const Text(Strings.openInMaps)),
+                  onPressed: () => openMap(), child: const Text(Strings.openInMaps)),
               const SizedBox(height: 16),
               Text(Strings.time, style: textTheme.headline6),
               Text("${Strings.meetTime} ${widget.event.dateMeeting}"),
