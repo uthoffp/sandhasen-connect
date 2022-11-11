@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
-import 'package:sandhasen_connect/view/widgets/message.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key, required this.event}) : super(key: key);
@@ -14,11 +12,6 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void openMap() {
     MapsLauncher.launchQuery(widget.event.toMapsLocation());
   }

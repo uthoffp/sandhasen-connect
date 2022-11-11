@@ -92,8 +92,8 @@ class _NewEventPageState extends State<NewEventPage> {
     var startTime = dateSelected;
     var meetTime = dateSelected;
 
-    startTime.setTime(pickerStartTime);
-    meetTime.setTime(pickerMeetTime);
+    startTime = startTime.setTime(pickerStartTime);
+    meetTime = meetTime.setTime(pickerMeetTime);
 
     Event event = Event(
         widget.newEvent ? null : widget.event?.id,
