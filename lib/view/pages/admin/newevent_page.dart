@@ -1,13 +1,18 @@
+
 import 'package:flutter/material.dart';
 import 'package:sandhasen_connect/data/firebase/notification.dart';
 import 'package:sandhasen_connect/data/model/address.dart';
 import 'package:sandhasen_connect/data/model/event.dart';
+import 'package:sandhasen_connect/extensions/date_extension.dart';
 import 'package:sandhasen_connect/resources/strings.dart';
 import 'package:sandhasen_connect/view/widgets/message.dart';
 import 'package:sandhasen_connect/viewmodel/events_viewmodel.dart';
 
 class NewEventPage extends StatefulWidget {
-  const NewEventPage({Key? key}) : super(key: key);
+  NewEventPage({this.event, this.newEvent = true, Key? key}) : super(key: key);
+
+  Event? event;
+  bool newEvent;
 
   @override
   _NewEventPageState createState() => _NewEventPageState();
@@ -32,62 +37,66 @@ class _NewEventPageState extends State<NewEventPage> {
   bool ownAppointment = false;
   bool ownApperance = false;
 
+  var dateSelected = DateTime.now();
+  var pickerStartTime = TimeOfDay.now();
+  var pickerMeetTime = TimeOfDay.now();
+
   void showNotificationDialog() {
-    showDialog(context: context, builder: (_) =>
-        AlertDialog(
-          title: const Text(Strings.dialogHeadNotification),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(Strings.dialogBodyNotification),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: notificationTextCtr,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    hintText: Strings.dialogTextFieldNotification,
-                    labelText: Strings.dialogTextFieldNotification,
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: const Text(Strings.dialogHeadNotification),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(Strings.dialogBodyNotification),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: notificationTextCtr,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        hintText: Strings.dialogTextFieldNotification,
+                        labelText: Strings.dialogTextFieldNotification,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: const Text(Strings.cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text(Strings.no),
-              onPressed: () {
-                saveEvent();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text(Strings.yes),
-              onPressed: () {
-                saveEvent();
-              },
-            )
-          ],
-        )
-    );
+              actions: [
+                TextButton(
+                  child: const Text(Strings.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text(Strings.no),
+                  onPressed: () {
+                    saveEvent(false);
+                  },
+                ),
+                TextButton(
+                  child: const Text(Strings.yes),
+                  onPressed: () {
+                    saveEvent(true);
+                  },
+                )
+              ],
+            ));
   }
 
-  void saveEvent() {
-    var date = _getDate();
-    var startTime = this.startTime.text;
-    var meetTime = this.meetTime.text;
+  void saveEvent(bool showNotification) {
+    var startTime = dateSelected;
+    var meetTime = dateSelected;
+
+    startTime.setTime(pickerStartTime);
+    meetTime.setTime(pickerMeetTime);
 
     Event event = Event(
-        "-1",
+        widget.newEvent ? null : widget.event?.id,
         nameCtr.text,
         orgCtr.text,
         Address(cityCtr.text, streetCtr.text, plzCtr.text, placeCtr.text),
@@ -95,52 +104,109 @@ class _NewEventPageState extends State<NewEventPage> {
         confirmed,
         ownApperance,
         ownAppointment,
-        DateTime.parse("$date $startTime"),
-        DateTime.parse("$date $meetTime"),
-        commentCtr.text
-    );
+        startTime,
+        meetTime,
+        commentCtr.text);
 
-    EventViewModel.addEvent(event)
-        .then((value) {
-          String notificationText = notificationTextCtr.text;
-          FirebaseNotification.sendNotification(
-              Strings.newEvent,
-              notificationText.isNotEmpty
-                  ? notificationText : Strings.notificationBodyNewEvent);
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-        })
-        .onError((error, stackTrace) {
-          setState(() {
-            Message.show(context, Strings.errorSave);
-          });
-        });
-  }
-
-  String _getDate() {
-    var orig = date.text;
-
-    if (orig.length == 10) {
-      var day = orig.substring(0, 2);
-      var month = orig.substring(3, 5);
-      var year = orig.substring(6, 10);
-      return "$year-$month-$day";
+    Future<void> response;
+    if (widget.newEvent) {
+      response = EventViewModel.addEvent(event);
+    } else {
+      response = EventViewModel.editEvent(event);
     }
 
-    return "";
+    response.then((value) {
+      String notificationText = notificationTextCtr.text;
+      if (showNotification) {
+        FirebaseNotification.sendNotification(
+            widget.newEvent ? Strings.newEvent : Strings.editEvent,
+            notificationText.isNotEmpty
+                ? notificationText
+                : Strings.notificationBodyNewEvent);
+      }
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }).onError((error, stackTrace) {
+      setState(() {
+        Message.show(context, Strings.errorSave);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (!widget.newEvent && widget.event != null) {
+      setState(() {
+        Event event = widget.event!;
+
+        nameCtr.text = event.name;
+        orgCtr.text = event.organisation;
+        placeCtr.text = event.address.place;
+        streetCtr.text = event.address.street;
+        plzCtr.text = event.address.postcode;
+        cityCtr.text = event.address.city;
+        commentCtr.text = event.comment;
+
+        date.text = event.dateStart.toGermanDateFormat;
+        startTime.text = event.dateStart.toTime;
+        meetTime.text = event.dateMeeting.toTime;
+        pickerStartTime = TimeOfDay.fromDateTime(event.dateStart);
+        pickerMeetTime = TimeOfDay.fromDateTime(event.dateMeeting);
+
+        confirmed = event.confirmed;
+        ownAppointment = event.ownAppointment;
+        cancled = event.canceled;
+        ownApperance = event.ownAppereance;
+      });
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: dateSelected,
+        firstDate: DateTime(2020, 1),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != dateSelected) {
+      setState(() {
+        dateSelected = picked;
+        date.text = dateSelected.toGermanDateFormat;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, String type) async {
+    final TimeOfDay? picked = await showTimePicker(
+        context: context,
+        initialTime: type == Strings.start ? pickerStartTime : pickerMeetTime);
+    if (picked != null) {
+      setState(() {
+        if (type == Strings.start) {
+          pickerStartTime = picked;
+          startTime.text = pickerStartTime.format(context);
+        } else {
+          pickerMeetTime = picked;
+          meetTime.text = pickerMeetTime.format(context);
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(Strings.newEvent)),
+      appBar: AppBar(
+          title:
+              Text(widget.newEvent ? Strings.newEvent : Strings.editedEvent)),
       body: Container(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
@@ -153,7 +219,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
@@ -170,14 +236,11 @@ class _NewEventPageState extends State<NewEventPage> {
               ),
               Align(
                 child: Text(Strings.address,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6),
+                    style: Theme.of(context).textTheme.headline6),
                 alignment: Alignment.centerLeft,
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
@@ -190,7 +253,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
@@ -203,7 +266,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               Row(
                 children: [
@@ -239,44 +302,30 @@ class _NewEventPageState extends State<NewEventPage> {
                 ],
               ),
               const SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                controller: mapsCtr,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: Strings.mapsUrl,
-                  labelText: Strings.mapsUrl,
-                ),
-              ),
-              const SizedBox(
-                height: 16,
+                height: 12,
               ),
               Align(
                 child: Text(Strings.time,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6),
+                    style: Theme.of(context).textTheme.headline6),
                 alignment: Alignment.centerLeft,
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               TextFormField(
                 keyboardType: TextInputType.number,
                 controller: date,
+                readOnly: true,
+                onTap: () => _selectDate(context),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  hintText: "Datum",
-                  labelText: "Datum (DD.MM.JJJJ)",
+                  hintText: Strings.date,
+                  labelText: Strings.date,
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               Row(
                 children: [
@@ -286,11 +335,13 @@ class _NewEventPageState extends State<NewEventPage> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         controller: meetTime,
+                        readOnly: true,
+                        onTap: () => _selectTime(context, Strings.meetTime),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
-                          hintText: "Treffen",
-                          labelText: "Treffen (HH:MM)",
+                          hintText: Strings.meeting,
+                          labelText: Strings.meeting,
                         ),
                       ),
                     ),
@@ -301,11 +352,13 @@ class _NewEventPageState extends State<NewEventPage> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         controller: startTime,
+                        readOnly: true,
+                        onTap: () => _selectTime(context, Strings.start),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
-                          hintText: "Start",
-                          labelText: "Start (HH:MM)",
+                          hintText: Strings.start,
+                          labelText: Strings.start,
                         ),
                       ),
                     ),
@@ -316,15 +369,12 @@ class _NewEventPageState extends State<NewEventPage> {
                 height: 16,
               ),
               Align(
-                child:
-                Text(Strings.menuInfo, style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline6),
+                child: Text(Strings.menuInfo,
+                    style: Theme.of(context).textTheme.headline6),
                 alignment: Alignment.centerLeft,
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               Row(
                 children: [
@@ -367,7 +417,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 ],
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               Row(
                 children: [
@@ -410,11 +460,12 @@ class _NewEventPageState extends State<NewEventPage> {
                 ],
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
+                  minimumSize: const Size.fromHeight(
+                      40), // fromHeight use double.infinity as width and 40 is the height
                 ),
                 onPressed: () {
                   showNotificationDialog();
@@ -423,7 +474,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 label: const Text(Strings.save),
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               )
             ],
           ),

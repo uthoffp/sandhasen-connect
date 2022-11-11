@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension MyDates on DateTime {
@@ -9,4 +10,10 @@ extension MyDates on DateTime {
   String get toGermanDateFormatWithTime => DateFormat('dd.MM.yyyy, HH:mm').format(this);
 
   String get toMonthYearFormat => DateFormat("MMMM yyyy").format(this);
+
+  String get toTime => DateFormat("HH:mm").format(this);
+
+  DateTime setTime(TimeOfDay time) {
+    return DateTime(year, month, day, time.hour, time.minute);
+  }
 }

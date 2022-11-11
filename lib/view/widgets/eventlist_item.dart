@@ -34,7 +34,7 @@ class EventListItem extends StatelessWidget {
 
   Widget _setNextPage() {
     if (asAdmin) {
-      return const NewEventPage();
+      return NewEventPage(event: _event, newEvent: false,);
     }
     return EventPage(event: _event);
   }

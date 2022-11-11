@@ -52,6 +52,7 @@ class Strings {
   static const String openInMaps = "In Maps öffnen";
 
   static const String newEvent = "Neuer Termin";
+  static const String editedEvent = "Termin Update";
   static const String editEvent = "Termin bearbeiten";
   static const String eventName = "Name des Termins";
   static const String name = "Name";
@@ -60,7 +61,9 @@ class Strings {
   static const String street = "Straße, Nr.";
   static const String postcode = "Postleitzahl";
   static const String city = "Stadt";
-  static const String mapsUrl = "Google Maps URL";
+  static const String date = "Datum";
+  static const String meeting = "Treffen";
+  static const String start = "Start";
   static const String dialogHeadNotification = "Benachrichtigung senden?";
   static const String dialogBodyNotification =
       "Soll eine Benachrichtigung an die Benutzer der App gesendet werden?";
@@ -77,7 +80,7 @@ class Strings {
 
   // ------------- Error messages -------------
   static const String errorRequest =
-      "Bei der Datenabfrage ist ein Fehler aufgetreten. Bitte versuchen sie es später erneut.";
+      "Konnte keine Verbindung zum Server herstellen. Bitte prüfe deine Internetverbindung.";
   static const String errorWrongPassword = "Password falsch.";
   static const String errorMapOpen =
       "Beim Öffnen der Karte ist ein Fehler aufgetreten.";

@@ -58,12 +58,16 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text(_title),
         actions: [
-          _title != Strings.menuAdmin ? IconButton(
-              onPressed: () => _contentWidget.refresh(),
-              icon: const Icon(Icons.refresh)) : Container(),
+          _title == Strings.menuEvents
+              ? const Switch(value: true, onChanged: null)
+              : Container(),
+          _title != Strings.menuAdmin
+              ? IconButton(
+                  onPressed: () => _contentWidget.refresh(),
+                  icon: const Icon(Icons.refresh))
+              : Container(),
           PopupMenuButton(
-            onSelected: (value) =>
-            {
+            onSelected: (value) => {
               if (value == 0)
                 {
                   showAboutDialog(
@@ -87,8 +91,7 @@ class _MainPageState extends State<MainPage> {
                 }
             },
             icon: const Icon(Icons.more_vert),
-            itemBuilder: (BuildContext context) =>
-            <PopupMenuEntry>[
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               const PopupMenuItem(child: Text(Strings.menuImpressum), value: 0),
               const PopupMenuItem(child: Text(Strings.menuHelp), value: 1)
             ],

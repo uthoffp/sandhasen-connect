@@ -3,6 +3,8 @@ class Address {
   String street;
   String postcode;
   String place;
+  String? lat;
+  String? long;
 
   Address(this.city, this.street, this.postcode, this.place);
 

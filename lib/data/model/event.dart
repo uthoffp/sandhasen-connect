@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'address.dart';
 
 class Event {
-  String id;
+  String? id;
   String name;
   String organisation;
   Address address;
